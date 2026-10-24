@@ -1,0 +1,40 @@
+name: Tunnel diagnostic
+
+on:
+  push:
+    paths:
+      - .github/workflows/tunnel-diagnostic.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Probe ESP32 through tunnel
+        env:
+          M4_TUNNEL_URL: ${{ vars.M4_TUNNEL_URL }}
+        run: |
+          set +e
+          : > diagnostic.txt
+          echo "url=$M4_TUNNEL_URL" >> diagnostic.txt
+          if [ -z "$M4_TUNNEL_URL" ]; then
+            echo "ERROR: M4_TUNNEL_URL is empty" >> diagnostic.txt
+          else
+            base="${M4_TUNNEL_URL%/}"
+            echo "endpoint=$base/api/remote_result_public" >> diagnostic.txt
+            echo "--- curl ---" >> diagnostic.txt
+            curl -v --max-time 15 "$base/api/remote_result_public" >> diagnostic.txt 2>&1
+            echo >> diagnostic.txt
+            echo "curl_exit=$?" >> diagnostic.txt
+          fi
+      - name: Commit diagnostic
+        run: |
+          git config user.name "m4-lab-bot"
+          git config user.email "m4-lab-bot@users.noreply.github.com"
+          git add diagnostic.txt
+          git commit -m "diag: tunnel probe" || true
+          git push
