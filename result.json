@@ -1,11 +1,8 @@
 {
-  "action": "run",
-  "response": {
-    "rx": "info\r\nm4test 0.3.57 (2026-10-24)\r\nclock: HOCO 48 MHz, flash cache ON\r\nplatform: OPCCR=00 MEMWAIT=1 FCACHEE=0001\r\nUID: 3717252B-33323035-87DA3336-4B5734C3\r\nreset: RSTSR0=00 RSTSR1=0000 RSTSR2=01 -> RES# pin (radio reset / D810 watchdog / reset button)\r\n> \r\n> ",
-    "ok": true,
-    "cmd": "info"
-  },
+  "action": "flash_local",
+  "file": "m4test_0.3.58.hex",
+  "error": "<HTTPError 500: 'Internal Server Error'>",
   "cmd": "info",
-  "id": 13,
-  "status": "ok"
+  "id": 14,
+  "status": "error"
 }
