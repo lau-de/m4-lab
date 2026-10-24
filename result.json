@@ -1,30 +1,11 @@
 {
-  "action": "flash_local",
+  "action": "run",
   "response": {
-    "flashrun": {
-      "rx": "info\r\nm4test 0.3.58 (2026-10-24)\r\nclock: HOCO 48 MHz, flash cache ON\r\nplatform: OPCCR=00 MEMWAIT=1 FCACHEE=0001\r\nUID: 3717252B-33323035-87DA3336-4B5734C3\r\nreset: RSTSR0=00 RSTSR1=0000 RSTSR2=01 -> RES# pin (radio reset / D810 watchdog / reset button)\r\n> \r\n> ",
-      "ok": true,
-      "cmd": "info",
-      "message": "FLASH + VERIFY + RUN OK",
-      "flash": {
-        "bytes_from_hex": 54744,
-        "max": "0x0000D993",
-        "blocks": 28,
-        "min": "0x00000000"
-      }
-    },
-    "staged": {
-      "erase_blocks": 28,
-      "max": "0x0000D993",
-      "ok": true,
-      "uploaded": 154021,
-      "hex_bytes": 54744,
-      "message": "HEX validated and staged. Ready to FLASH.",
-      "min": "0x00000000"
-    },
-    "ok": true
+    "rx": "bench 10000000\r\nHC05 benchmark: 10000000 instructions, stored ROM, deterministic B32 model\r\n  running...\r\n  ROM       slot 0, load #1, CRC32 1170C945\r\n  EEPROM    stored image\r\n  executed  10000000 / 10000000 instructions\r\n  elapsed   15211 ms  (730174545 ARM cycles @ 48 MHz)\r\n  speed     657418 HC05 instr/s\r\n  host/ins  73.01 ARM cycles/instruction\r\n  HC05 cyc  72068325 total, host/HC05-cycle 10.13\r\n  model     13740101 steps, STOP/resets 1, WAIT 3875\r\n  idle ff   WAIT 3977 jumps / 3736124 steps, delay loop 3118 jumps / 1047063 instr\r\n  idle ff   DECA/DECX-BNE 4545 jumps / 2119530 instr\r\n  idle ff   panel pin waits 2581 jumps / 108441 instr\r\n  lazy poll 152634 full polls, 2092278 skipped\r\n  replay    $139D+$05C4: 1806 recorded, 1702 pure, 1693 replays / 4480155 instr\r\n  dispatch  rp 1693/4480155 loop 3118/1047063 dec 4545/2119530 pin 101/4908 start 21750/2326841 hot 187/1117 sys 24363\r\n  4-5M rp    230/465289 instr, 9182584 ARM cyc\r\n  4-5M loop  44/14016 instr, 11656 ARM cyc\r\n  4-5M dec   440/115628 instr, 123288 ARM cyc\r\n  4-5M pin   86/4287 instr, 61188 ARM cyc\r\n  4-5M start 2713/398656 instr, 92611899 ARM cyc\r\n  4-5M hot   4/8 instr, 2180 ARM cyc\r\n  4-5M sys   2116/2116 instr, 737478 ARM cyc; top $9B:1676 $4A:440\r\n  rp05 pf   first 1, fp-miss 7906, delta-miss 2254, hit 1674\r\n  rp05 fp1  A 972 X 4357 SP 0 CCR 3884 | 58 3470 63 1 67 6657 69 1\r\n  rp05 fp2  BA 1 BB 0 D6 8 IO0C 0 | 5D 1877 5F 0 64 0 6C 40\r\n  rp05 del  di-miss 2254 dc-miss 2254; di 82..3362 dc 409..16769\r\n  rp05 perS d1 3928 d2 2428 d3 929 d4 527 d5 726 d6 1004 d7 1869 d8 1175\r\n  rp05 perD d1 1674 d2 25 d3 190 d4 338 d5 173 d6 1005 d7 4122 d8 2525\r\n  rp05 rec  start 1674, ok 1656, reject: impure 18 long 0 zero 0 state 0\r\n  rp05 imp  ee 0, PA-wr 1, IO-wr 14, irq 18, skip 1, read 18, wait/stop 0\r\n  rp05 diff regs 0, io 0, model 0, ram 0; last kind 0 addr $X\r\n  rp05 len  min 82, max 1434, avg 85 instr\r\n  model     panel 289 transfers / 865 bytes, TDA 15 bytes ACKed\r\n  model     slave 51 frames / 204 bytes ACKed (cmd 08:1 82:0 A4:0 other:50)\r\n  realtime  HC05 time 36034 ms, host 15211 ms -> 42 % of real time (<100 = faster than the radio)\r\n  map       stray 0, wrapped dummy reads 580, illegal 0\r\n  final     PC=3132 A=00 X=00 SP=FD CCR=02\r\n  RAM       static 23600, stack peak 1056, heap peak 0 bytes\r\n  stack     baseline 912 + bench growth 144 = peak 1056 bytes\r\n  RAM peak  24656 / 32768 bytes, free low-water 8112 bytes\r\n  note      stack peak uses an SRAM watermark; heap is 0 (no allocator)\r\n  note      DWT includes normal SysTick/watchdog IRQ overhead\r\n  per-1M:\r\n    0-1M  2288329 instr/s, 20.98 host/ins, 3.90 host/HC05-cycle\r\n    1-2M  651041 instr/s, 73.73 host/ins, 4.85 host/HC05-cycle\r\n    2-3M  651041 instr/s, 73.73 host/ins, 4.85 host/HC05-cycle\r\n    3-4M  796178 instr/s, 60.30 host/ins, 8.10 host/HC05-cycle\r\n    4-5M  448430 instr/s, 107.06 host/ins, 24.36 host/HC05-cycle\r\n    5-6M  598086 instr/s, 80.28 host/ins, 16.42 host/HC05-cycle\r\n    6-7M  610128 instr/s, 78.68 host/ins, 16.03 host/HC05-cycle\r\n    7-8M  608642 instr/s, 78.88 host/ins, 16.07 host/HC05-cycle\r\n    8-9M  614628 instr/s, 78.10 host/ins, 16.01 host/HC05-cycle\r\n    9-10M  612369 instr/s, 78.39 host/ins, 15.97 host/HC05-cycle\r\n> \r\n> ",
+    "ok": true,
+    "cmd": "bench 10000000"
   },
-  "cmd": "info",
-  "id": 15,
+  "cmd": "bench 10000000",
+  "id": 16,
   "status": "ok"
 }
