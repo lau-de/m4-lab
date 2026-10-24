@@ -1,4 +1,4 @@
-name: Collect M4 result
+name: Execute M4 command
 
 on:
   push:
@@ -10,46 +10,94 @@ permissions:
   contents: write
 
 jobs:
-  collect:
+  execute:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Read command id
-        id: cmd
-        run: |
-          echo "id=$(jq -r '.id' command.json)" >> "$GITHUB_OUTPUT"
-
-      - name: Wait for ESP32 result
+      - name: Execute command on ESP32
         env:
           M4_TUNNEL_URL: ${{ vars.M4_TUNNEL_URL }}
-          COMMAND_ID: ${{ steps.cmd.outputs.id }}
+          M4_API_KEY: ${{ secrets.M4_API_KEY }}
         run: |
-          set -e
-          if [ -z "$M4_TUNNEL_URL" ]; then
-            echo "Repository variable M4_TUNNEL_URL is not set"
+          set -euo pipefail
+
+          if [ -z "${M4_TUNNEL_URL:-}" ]; then
+            echo 'M4_TUNNEL_URL is not set'
             exit 1
           fi
+          if [ -z "${M4_API_KEY:-}" ]; then
+            echo 'M4_API_KEY secret is not set'
+            exit 1
+          fi
+
           base="${M4_TUNNEL_URL%/}"
-          ok=0
-          for i in $(seq 1 48); do
-            echo "poll $i/48 command=$COMMAND_ID"
-            if curl -fsS --max-time 10 "$base/api/remote_result_public" -o /tmp/m4.json; then
-              cat /tmp/m4.json
-              rid=$(jq -r '.remote.id // 0' /tmp/m4.json)
-              status=$(jq -r '.remote.status // ""' /tmp/m4.json)
-              if [ "$rid" = "$COMMAND_ID" ] && [ "$status" != "running" ]; then
-                jq '.remote' /tmp/m4.json > result.json
-                ok=1
-                break
+          id=$(jq -r '.id' command.json)
+          action=$(jq -r '.action // "run"' command.json)
+          cmd=$(jq -r '.cmd // "info"' command.json)
+          firmware=$(jq -r '.firmware // "latest.hex"' command.json)
+
+          echo "id=$id action=$action cmd=$cmd firmware=$firmware"
+
+          rc=0
+          case "$action" in
+            run)
+              curl -fsS --max-time 120 -G \
+                --data-urlencode "key=$M4_API_KEY" \
+                --data-urlencode "cmd=$cmd" \
+                "$base/api/run" > /tmp/esp.json || rc=$?
+              ;;
+
+            reset)
+              curl -fsS --max-time 30 -G \
+                --data-urlencode "key=$M4_API_KEY" \
+                "$base/api/reset" > /tmp/esp.json || rc=$?
+              ;;
+
+            flashrun)
+              if [ ! -f "$firmware" ]; then
+                echo "Firmware file not found: $firmware"
+                rc=90
+                printf '{"ok":false,"error":"firmware file not found"}\n' > /tmp/esp.json
+              else
+                echo "Uploading $firmware"
+                curl -fsS --max-time 120 -X POST \
+                  --data-binary "@$firmware" \
+                  "$base/api/upload?key=$(python3 -c 'import urllib.parse,os; print(urllib.parse.quote(os.environ["M4_API_KEY"], safe=""))')&name=$(python3 -c 'import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1], safe=""))' "$firmware")" \
+                  > /tmp/upload.json || rc=$?
+
+                if [ "$rc" = "0" ]; then
+                  cat /tmp/upload.json
+                  curl -fsS --max-time 300 -G \
+                    --data-urlencode "key=$M4_API_KEY" \
+                    --data-urlencode "cmd=$cmd" \
+                    "$base/api/flashrun" > /tmp/esp.json || rc=$?
+                else
+                  cp /tmp/upload.json /tmp/esp.json 2>/dev/null || printf '{"ok":false,"error":"upload failed"}\n' > /tmp/esp.json
+                fi
               fi
-            fi
-            sleep 5
-          done
-          if [ "$ok" != "1" ]; then
-            echo "Timed out waiting for command $COMMAND_ID"
-            exit 1
+              ;;
+
+            *)
+              rc=91
+              printf '{"ok":false,"error":"unknown action"}\n' > /tmp/esp.json
+              ;;
+          esac
+
+          if [ ! -s /tmp/esp.json ]; then
+            printf '{"ok":false,"error":"empty response"}\n' > /tmp/esp.json
           fi
+
+          jq -n \
+            --argjson id "$id" \
+            --arg action "$action" \
+            --arg cmd "$cmd" \
+            --argjson rc "$rc" \
+            --slurpfile response /tmp/esp.json \
+            '{id:$id, action:$action, cmd:$cmd, transport_rc:$rc, response:$response[0]}' \
+            > result.json
+
+          cat result.json
 
       - name: Commit result
         run: |
@@ -59,6 +107,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No result change"
           else
-            git commit -m "result: command ${{ steps.cmd.outputs.id }}"
+            id=$(jq -r '.id' command.json)
+            git commit -m "result: command $id"
             git push
           fi
