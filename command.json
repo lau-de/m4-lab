@@ -1,5 +1,5 @@
 {
-  "id": 6,
+  "id": 7,
   "action": "run",
-  "cmd": "bench"
+  "cmd": "rt"
 }
