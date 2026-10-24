@@ -1,5 +1,5 @@
 {
-  "id": 11,
+  "id": 12,
   "action": "run",
-  "cmd": "profile 1000000"
+  "cmd": "cdebt 1000000"
 }
