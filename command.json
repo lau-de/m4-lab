@@ -1,0 +1,6 @@
+{
+  "id": 0,
+  "action": "idle",
+  "firmware": "latest.hex",
+  "commands": ["info"]
+}
