@@ -1,11 +1,11 @@
 {
   "action": "run",
   "response": {
-    "rx": "info\r\nm4test 0.3.57 (2026-10-24)\r\nclock: HOCO 48 MHz, flash cache ON\r\nplatform: OPCCR=00 MEMWAIT=1 FCACHEE=0001\r\nUID: 3717252B-33323035-87DA3336-4B5734C3\r\nreset: RSTSR0=00 RSTSR1=0000 RSTSR2=01 -> RES# pin (radio reset / D810 watchdog / reset button)\r\n> \r\n> ",
+    "rx": "bench\r\nHC05 benchmark: 1000000 instructions, stored ROM, deterministic B32 model\r\n  running...\r\n  ROM       slot 0, load #1, CRC32 1170C945\r\n  EEPROM    stored image\r\n  executed  1000000 / 1000000 instructions\r\n  elapsed   594 ms  (28530880 ARM cycles @ 48 MHz)\r\n  speed     1683501 HC05 instr/s\r\n  host/ins  28.53 ARM cycles/instruction\r\n  HC05 cyc  3311552 total, host/HC05-cycle 8.61\r\n  model     1000000 steps, STOP/resets 0, WAIT 0\r\n  idle ff   WAIT 0 jumps / 0 steps, delay loop 2341 jumps / 790365 instr\r\n  idle ff   DECA/DECX-BNE 85 jumps / 21670 instr\r\n  idle ff   panel pin waits 432 jumps / 14943 instr\r\n  lazy poll 2996 full polls, 74742 skipped\r\n  replay    $139D+$05C4: 49 recorded, 49 pure, 49 replays / 95284 instr\r\n  dispatch  rp 49/95284 loop 2341/790365 dec 85/21670 pin 64/4368 start 1715/87172 hot 131/703 sys 438\r\n  4-5M rp    0/0 instr, 0 ARM cyc\r\n  4-5M loop  0/0 instr, 0 ARM cyc\r\n  4-5M dec   0/0 instr, 0 ARM cyc\r\n  4-5M pin   0/0 instr, 0 ARM cyc\r\n  4-5M start 0/0 instr, 0 ARM cyc\r\n  4-5M hot   0/0 instr, 0 ARM cyc\r\n  4-5M sys   0/0 instr, 0 ARM cyc; top\r\n  rp05 pf   first 1, fp-miss 236, delta-miss 67, hit 49\r\n  rp05 fp1  A 97 X 104 SP 0 CCR 116 | 58 89 63 4 67 199 69 1\r\n  rp05 fp2  BA 1 BB 0 D6 9 IO0C 0 | 5D 62 5F 0 64 0 6C 7\r\n  rp05 del  di-miss 67 dc-miss 67; di 82..3280 dc 409..16360\r\n  rp05 perS d1 116 d2 70 d3 24 d4 10 d5 14 d6 20 d7 58 d8 32\r\n  rp05 perD d1 49 d2 0 d3 5 d4 10 d5 5 d6 26 d7 104 d8 84\r\n  rp05 rec  start 49, ok 49, reject: impure 0 long 0 zero 0 state 0\r\n  rp05 imp  ee 0, PA-wr 0, IO-wr 0, irq 0, skip 0, read 0, wait/stop 0\r\n  rp05 diff regs 0, io 0, model 0, ram 0; last kind 0 addr $X\r\n  rp05 len  min 82, max 82, avg 82 instr\r\n  model     panel 41 transfers / 119 bytes, TDA 12 bytes ACKed\r\n  model     slave 6 frames / 24 bytes ACKed (cmd 08:1 82:0 A4:0 other:5)\r\n  realtime  HC05 time 1655 ms, host 594 ms -> 35 % of real time (<100 = faster than the radio)\r\n  map       stray 0, wrapped dummy reads 83, illegal 0\r\n  final     PC=2608 A=55 X=07 SP=F7 CCR=00\r\n  RAM       static 23600, stack peak 1056, heap peak 0 bytes\r\n  stack     baseline 912 + bench growth 144 = peak 1056 bytes\r\n  RAM peak  24656 / 32768 bytes, free low-water 8112 bytes\r\n  note      stack peak uses an SRAM watermark; heap is 0 (no allocator)\r\n  note      DWT includes normal SysTick/watchdog IRQ overhead\r\n> \r\n> ",
     "ok": true,
-    "cmd": "info"
+    "cmd": "bench"
   },
-  "cmd": "info",
-  "id": 5,
+  "cmd": "bench",
+  "id": 6,
   "status": "ok"
 }
