@@ -1,0 +1,64 @@
+name: Collect M4 result
+
+on:
+  push:
+    paths:
+      - command.json
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read command id
+        id: cmd
+        run: |
+          echo "id=$(jq -r '.id' command.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Wait for ESP32 result
+        env:
+          M4_TUNNEL_URL: ${{ vars.M4_TUNNEL_URL }}
+          COMMAND_ID: ${{ steps.cmd.outputs.id }}
+        run: |
+          set -e
+          if [ -z "$M4_TUNNEL_URL" ]; then
+            echo "Repository variable M4_TUNNEL_URL is not set"
+            exit 1
+          fi
+          base="${M4_TUNNEL_URL%/}"
+          ok=0
+          for i in $(seq 1 48); do
+            echo "poll $i/48 command=$COMMAND_ID"
+            if curl -fsS --max-time 10 "$base/api/remote_result_public" -o /tmp/m4.json; then
+              cat /tmp/m4.json
+              rid=$(jq -r '.remote.id // 0' /tmp/m4.json)
+              status=$(jq -r '.remote.status // ""' /tmp/m4.json)
+              if [ "$rid" = "$COMMAND_ID" ] && [ "$status" != "running" ]; then
+                jq '.remote' /tmp/m4.json > result.json
+                ok=1
+                break
+              fi
+            fi
+            sleep 5
+          done
+          if [ "$ok" != "1" ]; then
+            echo "Timed out waiting for command $COMMAND_ID"
+            exit 1
+          fi
+
+      - name: Commit result
+        run: |
+          git config user.name "m4-lab-bot"
+          git config user.email "m4-lab-bot@users.noreply.github.com"
+          git add result.json
+          if git diff --cached --quiet; then
+            echo "No result change"
+          else
+            git commit -m "result: command ${{ steps.cmd.outputs.id }}"
+            git push
+          fi
