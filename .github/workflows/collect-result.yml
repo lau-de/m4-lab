@@ -34,7 +34,8 @@ jobs:
           ok=0
           for i in $(seq 1 60); do
             echo "poll $i/60"
-            if curl -fsS --max-time 10 "$base/api/remote_result_public" -o /tmp/m4.json; then
+            nonce=$(date +%s%N)
+            if curl -fsS --max-time 10 -H 'Cache-Control: no-cache' "$base/api/remote_result_public?t=$nonce" -o /tmp/m4.json; then
               cat /tmp/m4.json
               rid=$(jq -r '.remote.id // 0' /tmp/m4.json)
               status=$(jq -r '.remote.status // ""' /tmp/m4.json)
