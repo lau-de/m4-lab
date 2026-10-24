@@ -1,0 +1,81 @@
+url=https://served-province-triangle-terrace.trycloudflare.com
+endpoint=https://served-province-triangle-terrace.trycloudflare.com/api/remote_result_public
+--- curl ---
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Host served-province-triangle-terrace.trycloudflare.com:443 was resolved.
+* IPv6: 2606:4700::6810:e784, 2606:4700::6810:e684
+* IPv4: 104.16.231.132, 104.16.230.132
+*   Trying 104.16.231.132:443...
+* Connected to served-province-triangle-terrace.trycloudflare.com (104.16.231.132) port 443
+* ALPN: curl offers h2,http/1.1
+} [5 bytes data]
+* TLSv1.3 (OUT), TLS handshake, Client hello (1):
+} [512 bytes data]
+*  CAfile: /etc/ssl/certs/ca-certificates.crt
+*  CApath: /etc/ssl/certs
+{ [5 bytes data]
+* TLSv1.3 (IN), TLS handshake, Server hello (2):
+{ [122 bytes data]
+* TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
+{ [19 bytes data]
+* TLSv1.3 (IN), TLS handshake, Certificate (11):
+{ [2505 bytes data]
+* TLSv1.3 (IN), TLS handshake, CERT verify (15):
+{ [79 bytes data]
+* TLSv1.3 (IN), TLS handshake, Finished (20):
+{ [52 bytes data]
+* TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
+} [1 bytes data]
+* TLSv1.3 (OUT), TLS handshake, Finished (20):
+} [52 bytes data]
+* SSL connection using TLSv1.3 / TLS_AES_256_GCM_SHA384 / X25519 / id-ecPublicKey
+* ALPN: server accepted h2
+* Server certificate:
+*  subject: CN=trycloudflare.com
+*  start date: Oct  5 20:58:33 2026 GMT
+*  expire date: Jan  3 21:58:20 2027 GMT
+*  subjectAltName: host "served-province-triangle-terrace.trycloudflare.com" matched cert's "*.trycloudflare.com"
+*  issuer: C=US; O=Google Trust Services; CN=WE1
+*  SSL certificate verify ok.
+*   Certificate level 0: Public key type EC/prime256v1 (256/128 Bits/secBits), signed using ecdsa-with-SHA256
+*   Certificate level 1: Public key type EC/prime256v1 (256/128 Bits/secBits), signed using ecdsa-with-SHA384
+*   Certificate level 2: Public key type EC/secp384r1 (384/192 Bits/secBits), signed using ecdsa-with-SHA384
+} [5 bytes data]
+* using HTTP/2
+* [HTTP/2] [1] OPENED stream for https://served-province-triangle-terrace.trycloudflare.com/api/remote_result_public
+* [HTTP/2] [1] [:method: GET]
+* [HTTP/2] [1] [:scheme: https]
+* [HTTP/2] [1] [:authority: served-province-triangle-terrace.trycloudflare.com]
+* [HTTP/2] [1] [:path: /api/remote_result_public]
+* [HTTP/2] [1] [user-agent: curl/8.5.0]
+* [HTTP/2] [1] [accept: */*]
+} [5 bytes data]
+> GET /api/remote_result_public HTTP/2
+> Host: served-province-triangle-terrace.trycloudflare.com
+> User-Agent: curl/8.5.0
+> Accept: */*
+> 
+{ [5 bytes data]
+* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+{ [230 bytes data]
+* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+{ [230 bytes data]
+* old SSL session ID is stale, removing
+{ [5 bytes data]
+< HTTP/2 200 
+< date: Sat, 24 Oct 2026 21:52:41 GMT
+< content-type: application/json
+< content-length: 101
+< cf-ray: a4fc35c23c23ad05-MSP
+< cf-cache-status: DYNAMIC
+< access-control-allow-origin: *
+< server: cloudflare
+< x-robots-tag: none
+< x-robots-tag: none
+< 
+{ [101 bytes data]
+100   101  100   101    0     0    195      0 --:--:-- --:--:-- --:--:--   195
+* Connection #0 to host served-province-triangle-terrace.trycloudflare.com left intact
+{"last_id": 0, "ok": true, "remote": {"message": "No remote command yet", "id": 0, "status": "idle"}}
+curl_exit=0
