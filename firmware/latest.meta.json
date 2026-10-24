@@ -1,0 +1,11 @@
+{
+  "version": "m4test_0.3.57",
+  "format": "raw-codeflash-base64-chunks",
+  "start": 0,
+  "size": 57344,
+  "erase_unit": 2048,
+  "write_unit": 8,
+  "parts": 8,
+  "part_chars": 10000,
+  "sha256": "b6e6c0640ab171632faccebc6d82f79a6bcfabbed2c785683526ce0c524c7853"
+}
