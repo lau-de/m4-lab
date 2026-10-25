@@ -1,5 +1,5 @@
 {
-  "id": 24,
-  "action": "run",
-  "cmd": "profile 5000000"
+  "id": 25,
+  "action": "flash_local",
+  "file": "m4test_0.3.59.hex"
 }
