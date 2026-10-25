@@ -1,8 +1,8 @@
 {
-  "id": 24,
+  "id": 25,
   "status": "error",
-  "action": "run",
-  "cmd": "profile 5000000",
-  "file": null,
-  "error": "<HTTPError 408: 'Request Timeout'>"
+  "action": "flash_local",
+  "cmd": null,
+  "file": "m4test_0.3.59.hex",
+  "error": "<HTTPError 500: 'Internal Server Error'>"
 }
