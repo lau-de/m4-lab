@@ -1,0 +1,28 @@
+name: Assemble 0.3.59 firmware
+
+on:
+  push:
+    paths:
+      - firmware/059-segment23.hex
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assemble and verify
+        run: |
+          set -euo pipefail
+          cat firmware/059-segment{00..23}.hex > firmware/m4test_0.3.59.hex
+          echo "84d3bc06d1e18ad4effaf220fd81e43deb69186a6ef75fdc857b74a2e31a4302  firmware/m4test_0.3.59.hex" | sha256sum -c -
+      - name: Commit firmware
+        run: |
+          git config user.name "m4-lab-bot"
+          git config user.email "m4-lab-bot@users.noreply.github.com"
+          git add firmware/m4test_0.3.59.hex
+          git commit -m "firmware: assemble m4test 0.3.59"
+          git push
