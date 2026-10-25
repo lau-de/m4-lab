@@ -1,8 +1,8 @@
 {
-  "id": 25,
+  "id": 26,
   "status": "error",
-  "action": "flash_local",
-  "cmd": null,
-  "file": "m4test_0.3.59.hex",
-  "error": "<HTTPError 500: 'Internal Server Error'>"
+  "action": "run",
+  "cmd": "info",
+  "file": null,
+  "error": "URLError(TimeoutError(10060, 'Ein Verbindungsversuch ist fehlgeschlagen, da die Gegenstelle nach einer bestimmten Zeitspanne nicht richtig reagiert hat, oder die hergestellte Verbindung war fehlerhaft, da der verbundene Host nicht reagiert hat', None, 10060, None))"
 }
