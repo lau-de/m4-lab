@@ -1,5 +1,5 @@
 {
-  "id": 27,
+  "id": 28,
   "action": "run",
-  "cmd": "info"
+  "cmd": "bench 10000000"
 }
