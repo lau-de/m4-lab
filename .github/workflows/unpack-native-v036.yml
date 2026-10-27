@@ -34,3 +34,5 @@ jobs:
           fi
           git commit -m 'unpack native RA4M1 port v0.36'
           git push
+
+# retrigger 2026-10-27: unpack source before native audio-state port
