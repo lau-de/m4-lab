@@ -1,6 +1,7 @@
 name: unpack-native-v036
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - '.github/workflows/unpack-native-v036.yml'
