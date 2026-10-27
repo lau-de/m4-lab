@@ -1,0 +1,35 @@
+name: unpack-native-v036
+
+on:
+  push:
+    paths:
+      - '.github/workflows/unpack-native-v036.yml'
+      - 'native/audi_concert_ra4m1_native_c_v0_36.zip'
+
+permissions:
+  contents: write
+
+jobs:
+  unpack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Unpack v0.36 source tree
+        run: |
+          rm -rf native/audi_concert_ra4m1_native_c_v0_36
+          mkdir -p native/audi_concert_ra4m1_native_c_v0_36
+          unzip -q native/audi_concert_ra4m1_native_c_v0_36.zip -d /tmp/v036
+          cp -a /tmp/v036/audi_concert_ra4m1_native_c_v0_36/. native/audi_concert_ra4m1_native_c_v0_36/
+      - name: Commit extracted tree
+        run: |
+          git config user.name 'm4-lab-bot'
+          git config user.email 'm4-lab-bot@users.noreply.github.com'
+          git add native/audi_concert_ra4m1_native_c_v0_36
+          if git diff --cached --quiet; then
+            echo 'No changes to commit'
+            exit 0
+          fi
+          git commit -m 'unpack native RA4M1 port v0.36'
+          git push
