@@ -1,0 +1,39 @@
+name: import native v0.61 full source fixed
+
+on:
+  push:
+    paths:
+      - 'native/import/v0_61_fixed/TRIGGER'
+
+permissions:
+  contents: write
+
+jobs:
+  unpack-and-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Reconstruct and verify source archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat native/import/v0_61_fixed/part*.b64 | base64 -d > /tmp/v061-source.tar.gz
+          echo '62a8f15033d04f869f9583231e90f6a573c7a66a154fcfc5884cbcdd93f63aed  /tmp/v061-source.tar.gz' | sha256sum -c -
+          rm -rf native/releases/v0_61
+          mkdir -p native/releases/v0_61
+          tar -xzf /tmp/v061-source.tar.gz -C native/releases/v0_61
+          cp native/import/v0_61/SOURCE_MANIFEST.txt native/releases/v0_61/SOURCE_MANIFEST.txt
+          cp native/import/v0_61/RELEASE_README.md native/releases/v0_61/GITHUB_RELEASE_README.md
+          rm -rf native/import/v0_61 native/import/v0_61_fixed
+          rm -f .github/workflows/import-native-v061.yml .github/workflows/import-native-v061-fixed.yml
+      - name: Commit full v0.61 source tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'native: import full source snapshot v0.61'
+          git push origin HEAD:main
